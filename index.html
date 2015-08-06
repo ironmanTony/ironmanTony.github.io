@@ -72,6 +72,61 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-AysncTask源码解析" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/06/AysncTask源码解析/" class="article-date">
+  <time datetime="2015-08-06T08:03:13.000Z" itemprop="datePublished">2015-08-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AsyncTask的类图">AsyncTask的类图</h2><p><img src="/imgs/asynctask.png" alt=""></p>
+<ul>
+<li>其中，如果使用默认的Executor其实AsyncTask中的任务是一个一个执行的。<br>其中灰色的是接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SerialExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ArrayDeque&lt;Runnable&gt; mTasks = <span class="keyword">new</span> ArrayDeque&lt;Runnable&gt;();</span><br><span class="line">    Runnable mActive;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(<span class="keyword">final</span> Runnable r)</span> </span>&#123;</span><br><span class="line">        mTasks.offer(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    r.run();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    scheduleNext();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">if</span> (mActive == <span class="keyword">null</span>) &#123;</span><br><span class="line">            scheduleNext();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">scheduleNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ((mActive = mTasks.poll()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            THREAD_POOL_EXECUTOR.execute(mActive);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这段代码中可以看出来。<br>如果使用Thread_pool_executor那么就会使用线程池来执行你的task。<br>注释中也有：</p>
+<p>Order of execution</p>
+<p>When first introduced, AsyncTasks were executed serially on a single background<br>thread. Starting with {android.os.Build.VERSION_CODES#DONUT}, this was changed<br>to a pool of threads allowing multiple tasks to operate in parallel. Starting with<br>android.os.Build.VERSION_CODES#HONEYCOMB, tasks are executed on a single<br>thread to avoid common application errors caused by parallel execution</p>
+<p> If you truly want parallel execution, you can invoke<br>executeOnExecutor(java.util.concurrent.Executor, Object[])} with<br>THREAD_POOL_EXECUTOR</p>
+<ul>
+<li><p>从类图可以看出来AsyncTask主要使用了组合的方式来使用代码。</p>
+</li>
+<li><p>理解代码的一个方式是画类图，然后找一个入口然后看下去，看他是如何调用的。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/08/06/AysncTask源码解析/" data-id="ciczy66sr0005tgxpwlir7w1u" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-gralde 循环依赖的问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/05/23/gralde 循环依赖的问题/" class="article-date">
@@ -115,7 +170,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/23/gralde 循环依赖的问题/" data-id="cicvnfs980007egxpt3dznals" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/23/gralde 循环依赖的问题/" data-id="ciczy66sz0008tgxpcb0paeft" class="article-share-link">分享到</a>
       
 
       
@@ -172,7 +227,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/20/listView 闪动的问题/" data-id="cicvnfs9d0008egxp12ehdl9l" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/20/listView 闪动的问题/" data-id="ciczy66t20009tgxpcgldx5e4" class="article-share-link">分享到</a>
       
 
       
@@ -216,7 +271,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="cicvnfs940005egxpx2x2itjz" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="ciczy66st0006tgxpzzb3avqd" class="article-share-link">分享到</a>
       
 
       
@@ -272,7 +327,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/04/使用monkey对app进行压力测试/" data-id="cicvnfs960006egxpbhhf2nio" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/04/使用monkey对app进行压力测试/" data-id="ciczy66su0007tgxpi0hq9xri" class="article-share-link">分享到</a>
       
 
       
@@ -320,7 +375,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/01/关于如何解决一个问题/" data-id="cicvnfs9f0009egxpe0emsb8n" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/01/关于如何解决一个问题/" data-id="ciczy66t4000atgxpa29l1420" class="article-share-link">分享到</a>
       
 
       
@@ -377,7 +432,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/04/30/Android中使用UnitTest/" data-id="cicvnfs810000egxpj5qnwjyi" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/04/30/Android中使用UnitTest/" data-id="ciczy66rr0000tgxp55gg1tkk" class="article-share-link">分享到</a>
       
 
       
@@ -487,7 +542,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/行为型模式/" data-id="cicvnfs8r0001egxp33wr46rl" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/行为型模式/" data-id="ciczy66si0001tgxpc9x3m11m" class="article-share-link">分享到</a>
       
 
       
@@ -593,7 +648,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/结构型模式/" data-id="cicvnfs8y0002egxphxtjkzk3" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/结构型模式/" data-id="ciczy66sl0002tgxphm0k9ha3" class="article-share-link">分享到</a>
       
 
       
@@ -645,7 +700,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/建造型设计模式/" data-id="cicvnfs910003egxpvsfmz743" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/建造型设计模式/" data-id="ciczy66sn0003tgxpssbgk3xn" class="article-share-link">分享到</a>
       
 
       
@@ -658,86 +713,10 @@
 
 
   
-    <article id="post-design-pattern" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/03/20/design-pattern/" class="article-date">
-  <time datetime="2014-03-20T01:44:40.000Z" itemprop="datePublished">2014-03-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/03/20/design-pattern/">design_pattern</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="设计模式的总结">设计模式的总结</h1><hr>
-<h2 id="设计模式的分类：">设计模式的分类：</h2><ul>
-<li><h2 id="建造型设计模式(Creational_Patterns)"><a href="../建造型设计模式">建造型设计模式(Creational Patterns)</a></h2><ol>
-<li>工厂方法模式(Factory Method)</li>
-<li>抽象工厂模式(Abstract Factory)</li>
-<li>单例模式(Singleton)</li>
-<li>原型模式(prototype)</li>
-<li>建造者模式(Builder)</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li><h2 id="结构型模式(Structural_Patterns)"><a href="../结构型模式">结构型模式(Structural Patterns)</a></h2><ol>
-<li>适配器模式（Adapter Pattern)</li>
-<li>门面模式（Facade Pattern)</li>
-<li>代理模式（Proxy pattern)</li>
-<li>合成模式（Composite Pattern)</li>
-<li>享元模式（Flyweight Pattern)</li>
-<li>装饰着模式（Decorator Pattern)</li>
-<li>桥模式（Bridge Pattern)</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li><h2 id="行为型模式（Behavioral_Patterns)"><a href="../行为型模式">行为型模式（Behavioral Patterns)</a></h2><ol>
-<li>策略模式（Strategy Pattern)</li>
-<li>迭代器模式（Iterator Pattern)</li>
-<li>模板方法模式（Template Method Pattern)</li>
-<li>中介者模式（Mediator Pattern)</li>
-<li>访问者模式（Visitor Pattern)</li>
-<li>职责链模式（Chain of Responsibility)</li>
-<li>状态模式（State Pattern)</li>
-<li>解释器模式（Interpreter Pattern)</li>
-<li>观察者模式（Observer Pattern)</li>
-<li>命令模式（Command Pattern)</li>
-<li>备忘录模式（Memento Pattern)</li>
-</ol>
-</li>
-</ul>
-<p><img src="/imgs/design_pattern1.jpg" alt="design pattern "></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2014/03/20/design-pattern/" data-id="cicvnfs920004egxpvue5ovyy" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 </section>
       
@@ -753,7 +732,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -763,6 +742,10 @@
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
+          </li>
         
           <li>
             <a href="/2015/05/23/gralde 循环依赖的问题/">gralde 循环依赖的问题</a>
@@ -778,10 +761,6 @@
         
           <li>
             <a href="/2015/05/04/使用monkey对app进行压力测试/">使用monkey对app进行压力测试</a>
-          </li>
-        
-          <li>
-            <a href="/2015/05/01/关于如何解决一个问题/">关于如何解决一个问题</a>
           </li>
         
       </ul>

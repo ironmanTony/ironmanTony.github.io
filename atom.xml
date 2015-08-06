@@ -5,7 +5,7 @@
   <subtitle><![CDATA[不要想着远处的路有多远，要知道你是在走一小步，你能办到的！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-07-27T02:32:38.901Z</updated>
+  <updated>2015-08-06T08:41:31.667Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -14,6 +14,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[AysncTask源码解析]]></title>
+    <link href="http://yoursite.com/2015/08/06/AysncTask%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
+    <id>http://yoursite.com/2015/08/06/AysncTask源码解析/</id>
+    <published>2015-08-06T08:03:13.000Z</published>
+    <updated>2015-08-06T08:41:31.667Z</updated>
+    <content type="html"><![CDATA[<h2 id="AsyncTask的类图">AsyncTask的类图</h2><p><img src="/imgs/asynctask.png" alt=""></p>
+<ul>
+<li>其中，如果使用默认的Executor其实AsyncTask中的任务是一个一个执行的。<br>其中灰色的是接口</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SerialExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> ArrayDeque&lt;Runnable&gt; mTasks = <span class="keyword">new</span> ArrayDeque&lt;Runnable&gt;();</span><br><span class="line">    Runnable mActive;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(<span class="keyword">final</span> Runnable r)</span> </span>&#123;</span><br><span class="line">        mTasks.offer(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    r.run();</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    scheduleNext();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">if</span> (mActive == <span class="keyword">null</span>) &#123;</span><br><span class="line">            scheduleNext();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">scheduleNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ((mActive = mTasks.poll()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            THREAD_POOL_EXECUTOR.execute(mActive);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这段代码中可以看出来。<br>如果使用Thread_pool_executor那么就会使用线程池来执行你的task。<br>注释中也有：</p>
+<p>Order of execution</p>
+<p>When first introduced, AsyncTasks were executed serially on a single background<br>thread. Starting with {android.os.Build.VERSION_CODES#DONUT}, this was changed<br>to a pool of threads allowing multiple tasks to operate in parallel. Starting with<br>android.os.Build.VERSION_CODES#HONEYCOMB, tasks are executed on a single<br>thread to avoid common application errors caused by parallel execution</p>
+<p> If you truly want parallel execution, you can invoke<br>executeOnExecutor(java.util.concurrent.Executor, Object[])} with<br>THREAD_POOL_EXECUTOR</p>
+<ul>
+<li><p>从类图可以看出来AsyncTask主要使用了组合的方式来使用代码。</p>
+</li>
+<li><p>理解代码的一个方式是画类图，然后找一个入口然后看下去，看他是如何调用的。</p>
+</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="AsyncTask的类图">AsyncTask的类图</h2><p><img src="/imgs/asynctask.png" alt=""></p>
+<ul>
+<li>其中，如果使用默认的Executor其实AsyncTask中的任务是一个一个执行的。<br>]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[gralde 循环依赖的问题]]></title>
