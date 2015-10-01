@@ -72,6 +72,58 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-建造型设计模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/03/20/建造型设计模式/" class="article-date">
+  <time datetime="2014-03-20T02:44:41.000Z" itemprop="datePublished">2014-03-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/03/20/建造型设计模式/">建造型设计模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h2 id="简单工厂：">简单工厂：</h2><p>它的实质是由一个工厂类根据传入的参 数，动态决定应该创建哪一个产品类（这些产品类继承自一个父类或接口）的实例。将所有的类的创建放到一个类中。</p>
+<hr>
+<h2 id="工厂方法：">工厂方法：</h2><p>工厂方法模式是为了克服简单工厂模式的缺点（主要是为了满足OCP）而设计出来的。简单工厂模式的工厂类随着产品类的增加需要增加很多方法 （或代码），而工厂方法模式每个具体工厂类只完成单一任务，代码简洁。工厂方法模式完全满足OCP，即它有非常良好的扩展性。<br><img src="/imgs/dsign_pattern1_1.png" alt=""></p>
+<hr>
+<h2 id="抽象工厂：">抽象工厂：</h2><p>克服工厂方法增长速度太快的弊端。将同类产品抽象成一个工厂，从而减少工厂类的数量。<br><img src="/imgs/cxgc.jpg" alt=""></p>
+<hr>
+<h2 id="单例模式：">单例模式：</h2><p>可以使创建的对象只有一个，从而实现线程安全或保证数据单一。但是实现线程安全的单例需要在创建对象的时候加上synchronized代码块。</p>
+<hr>
+<h2 id="原型模式：">原型模式：</h2><p>原型模式被用在频繁调用且极其相似的对象上。原型模式会克隆对象并设置改变后的属性。原型模式消耗的资源较少。<br><img src="/imgs/yxms.png" alt=""></p>
+<hr>
+<h2 id="创建者模式：">创建者模式：</h2><p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。为何使用建造者模式是为了将构建复杂对象的过程和它的部件解耦。注意：是解耦过程和部件。<br>因为一个复杂的对象，不但有很多大量组成部分，如汽车，有很多部件：车轮、方向盘、发动机，还有各种小零件等等，部件很多，但远不止这些，如何将这些部件装配成一辆汽车，这个装配过程也很复杂(需要很好的组装技术)，Builder模式就是为了将部件和组装过程分开。<br><img src="/imgs/cjz.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2014/03/20/建造型设计模式/" data-id="cif8fymea00031wxpdmdz4im4" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-design-pattern" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/03/20/design-pattern/" class="article-date">
@@ -139,7 +191,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/design-pattern/" data-id="ciczy66sp0004tgxp4lj5wt6a" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/design-pattern/" data-id="cif8fymeb00041wxpvgr9cdxj" class="article-share-link">分享到</a>
       
 
       
@@ -171,7 +223,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -181,6 +233,10 @@
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/10/02/RadioGroup-check-的坑/">RadioGroup.check()的坑</a>
+          </li>
         
           <li>
             <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
@@ -196,10 +252,6 @@
         
           <li>
             <a href="/2015/05/05/git的几个问题/">关于git的几个问题</a>
-          </li>
-        
-          <li>
-            <a href="/2015/05/04/使用monkey对app进行压力测试/">使用monkey对app进行压力测试</a>
           </li>
         
       </ul>

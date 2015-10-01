@@ -5,7 +5,7 @@
   <subtitle><![CDATA[不要想着远处的路有多远，要知道你是在走一小步，你能办到的！]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-08-06T08:41:31.667Z</updated>
+  <updated>2015-10-01T16:33:15.801Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -14,6 +14,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[RadioGroup.check()的坑]]></title>
+    <link href="http://yoursite.com/2015/10/02/RadioGroup-check-%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2015/10/02/RadioGroup-check-的坑/</id>
+    <published>2015-10-01T16:20:43.000Z</published>
+    <updated>2015-10-01T16:33:15.801Z</updated>
+    <content type="html"><![CDATA[<h3 id="问题描述：">问题描述：</h3><p>我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个radiobutton下的网络请求会发送两次，而且fragment也会创建两次，而且那个新建的fragment里还有很多的初始化过程和网络请求，所以会让用户一直处在等待的状态。</p>
+<p>开始时候各种找原因，以为是我在哪里调用了太多次，还是共用layout文件有相同的id所以被别的地方的调用影响了？都不是，最后在stackoverflow上找到了答案：使用RadioGroup.check()会调用onCheckedChanged()方法三次，而我在onCheckedChanged()方法里判断了调用的是哪个id，然后发送请求创建fragmeng，所以只调用了两次。</p>
+<h3 id="statckoverflow原文链接：">statckoverflow原文链接：</h3><p><a href="http://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times" target="_blank" rel="external">http://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times</a></p>
+<p><img src="/img/radiogroupChecks.png" alt="workflow.png"></p>
+<h3 id="RadioGroup-check()源码如下：">RadioGroup.check()源码如下：</h3><p><a href="http://www.grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/android/widget/RadioGroup.java#RadioGroup.check%28int%29" target="_blank" rel="external">http://www.grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/android/widget/RadioGroup.java#RadioGroup.check%28int%29</a></p>
+<p><img src="/img/radiogroup2.png" alt="workflow.png"></p>
+<h3 id="解决方法_：">解决方法 ：</h3><p>使用radioBotton.setChecked()方法来解决</p>
+<p><img src="/img/radiogroup3.png" alt="workflow.png"></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h3 id="问题描述：">问题描述：</h3><p>我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[AysncTask源码解析]]></title>

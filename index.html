@@ -72,6 +72,54 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-RadioGroup-check-的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/02/RadioGroup-check-的坑/" class="article-date">
+  <time datetime="2015-10-01T16:20:43.000Z" itemprop="datePublished">2015-10-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/02/RadioGroup-check-的坑/">RadioGroup.check()的坑</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="问题描述：">问题描述：</h3><p>我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个radiobutton下的网络请求会发送两次，而且fragment也会创建两次，而且那个新建的fragment里还有很多的初始化过程和网络请求，所以会让用户一直处在等待的状态。</p>
+<p>开始时候各种找原因，以为是我在哪里调用了太多次，还是共用layout文件有相同的id所以被别的地方的调用影响了？都不是，最后在stackoverflow上找到了答案：使用RadioGroup.check()会调用onCheckedChanged()方法三次，而我在onCheckedChanged()方法里判断了调用的是哪个id，然后发送请求创建fragmeng，所以只调用了两次。</p>
+<h3 id="statckoverflow原文链接：">statckoverflow原文链接：</h3><p><a href="http://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times" target="_blank" rel="external">http://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times</a></p>
+<p><img src="/img/radiogroupChecks.png" alt="workflow.png"></p>
+<h3 id="RadioGroup-check()源码如下：">RadioGroup.check()源码如下：</h3><p><a href="http://www.grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/android/widget/RadioGroup.java#RadioGroup.check%28int%29" target="_blank" rel="external">http://www.grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/android/widget/RadioGroup.java#RadioGroup.check%28int%29</a></p>
+<p><img src="/img/radiogroup2.png" alt="workflow.png"></p>
+<h3 id="解决方法_：">解决方法 ：</h3><p>使用radioBotton.setChecked()方法来解决</p>
+<p><img src="/img/radiogroup3.png" alt="workflow.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/10/02/RadioGroup-check-的坑/" data-id="cif8fymd300001wxpswds15l6" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-AysncTask源码解析" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/06/AysncTask源码解析/" class="article-date">
@@ -114,7 +162,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/08/06/AysncTask源码解析/" data-id="ciczy66sr0005tgxpwlir7w1u" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/08/06/AysncTask源码解析/" data-id="cif8fymee00051wxpfxtlg5p2" class="article-share-link">分享到</a>
       
 
       
@@ -170,7 +218,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/23/gralde 循环依赖的问题/" data-id="ciczy66sz0008tgxpcb0paeft" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/23/gralde 循环依赖的问题/" data-id="cif8fymen00081wxpwbb7bfik" class="article-share-link">分享到</a>
       
 
       
@@ -227,7 +275,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/20/listView 闪动的问题/" data-id="ciczy66t20009tgxpcgldx5e4" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/20/listView 闪动的问题/" data-id="cif8fymeo00091wxpandxn9yj" class="article-share-link">分享到</a>
       
 
       
@@ -271,7 +319,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="ciczy66st0006tgxpzzb3avqd" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="cif8fymei00061wxpq6a6swji" class="article-share-link">分享到</a>
       
 
       
@@ -327,7 +375,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/04/使用monkey对app进行压力测试/" data-id="ciczy66su0007tgxpi0hq9xri" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/04/使用monkey对app进行压力测试/" data-id="cif8fymek00071wxpctmtt4jg" class="article-share-link">分享到</a>
       
 
       
@@ -375,7 +423,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/01/关于如何解决一个问题/" data-id="ciczy66t4000atgxpa29l1420" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/01/关于如何解决一个问题/" data-id="cif8fymeq000a1wxpooibqhtj" class="article-share-link">分享到</a>
       
 
       
@@ -432,7 +480,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/04/30/Android中使用UnitTest/" data-id="ciczy66rr0000tgxp55gg1tkk" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/04/30/Android中使用UnitTest/" data-id="cif8fymes000b1wxpf8hadund" class="article-share-link">分享到</a>
       
 
       
@@ -542,7 +590,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/行为型模式/" data-id="ciczy66si0001tgxpc9x3m11m" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/行为型模式/" data-id="cif8fyme500011wxpl9629eug" class="article-share-link">分享到</a>
       
 
       
@@ -648,59 +696,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/结构型模式/" data-id="ciczy66sl0002tgxphm0k9ha3" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-建造型设计模式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/03/20/建造型设计模式/" class="article-date">
-  <time datetime="2014-03-20T02:44:41.000Z" itemprop="datePublished">2014-03-20</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/03/20/建造型设计模式/">建造型设计模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h2 id="简单工厂：">简单工厂：</h2><p>它的实质是由一个工厂类根据传入的参 数，动态决定应该创建哪一个产品类（这些产品类继承自一个父类或接口）的实例。将所有的类的创建放到一个类中。</p>
-<hr>
-<h2 id="工厂方法：">工厂方法：</h2><p>工厂方法模式是为了克服简单工厂模式的缺点（主要是为了满足OCP）而设计出来的。简单工厂模式的工厂类随着产品类的增加需要增加很多方法 （或代码），而工厂方法模式每个具体工厂类只完成单一任务，代码简洁。工厂方法模式完全满足OCP，即它有非常良好的扩展性。<br><img src="/imgs/dsign_pattern1_1.png" alt=""></p>
-<hr>
-<h2 id="抽象工厂：">抽象工厂：</h2><p>克服工厂方法增长速度太快的弊端。将同类产品抽象成一个工厂，从而减少工厂类的数量。<br><img src="/imgs/cxgc.jpg" alt=""></p>
-<hr>
-<h2 id="单例模式：">单例模式：</h2><p>可以使创建的对象只有一个，从而实现线程安全或保证数据单一。但是实现线程安全的单例需要在创建对象的时候加上synchronized代码块。</p>
-<hr>
-<h2 id="原型模式：">原型模式：</h2><p>原型模式被用在频繁调用且极其相似的对象上。原型模式会克隆对象并设置改变后的属性。原型模式消耗的资源较少。<br><img src="/imgs/yxms.png" alt=""></p>
-<hr>
-<h2 id="创建者模式：">创建者模式：</h2><p>将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。为何使用建造者模式是为了将构建复杂对象的过程和它的部件解耦。注意：是解耦过程和部件。<br>因为一个复杂的对象，不但有很多大量组成部分，如汽车，有很多部件：车轮、方向盘、发动机，还有各种小零件等等，部件很多，但远不止这些，如何将这些部件装配成一辆汽车，这个装配过程也很复杂(需要很好的组装技术)，Builder模式就是为了将部件和组装过程分开。<br><img src="/imgs/cjz.png" alt=""></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2014/03/20/建造型设计模式/" data-id="ciczy66sn0003tgxpssbgk3xn" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/结构型模式/" data-id="cif8fyme800021wxpj64ygu5i" class="article-share-link">分享到</a>
       
 
       
@@ -732,7 +728,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -742,6 +738,10 @@
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/10/02/RadioGroup-check-的坑/">RadioGroup.check()的坑</a>
+          </li>
         
           <li>
             <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
@@ -757,10 +757,6 @@
         
           <li>
             <a href="/2015/05/05/git的几个问题/">关于git的几个问题</a>
-          </li>
-        
-          <li>
-            <a href="/2015/05/04/使用monkey对app进行压力测试/">使用monkey对app进行压力测试</a>
           </li>
         
       </ul>

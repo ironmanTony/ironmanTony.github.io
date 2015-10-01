@@ -4,17 +4,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2014/3 | ironmantony</title>
+  <title>RadioGroup.check()的坑 | ironmantony</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ironmantony">
-<meta property="og:url" content="http://yoursite.com/archives/2014/03/index.html">
+  <meta name="description" content="问题描述：我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个radiobutton下的网络请求会发送两次，而且fragment也会创建两次，而且那个新建的fragment里还有很多的初始化过程和网络请求，所以会让用户一直处在等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RadioGroup.check()的坑">
+<meta property="og:url" content="http://yoursite.com/2015/10/02/RadioGroup-check-的坑/index.html">
 <meta property="og:site_name" content="ironmantony">
-<meta property="og:description">
+<meta property="og:description" content="问题描述：我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个radiobutton下的网络请求会发送两次，而且fragment也会创建两次，而且那个新建的fragment里还有很多的初始化过程和网络请求，所以会让用户一直处在等">
+<meta property="og:image" content="http://yoursite.com/img/radiogroupChecks.png">
+<meta property="og:image" content="http://yoursite.com/img/radiogroup2.png">
+<meta property="og:image" content="http://yoursite.com/img/radiogroup3.png">
+<meta property="og:updated_time" content="2015-10-01T16:33:15.801Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ironmantony">
-<meta name="twitter:description">
+<meta name="twitter:title" content="RadioGroup.check()的坑">
+<meta name="twitter:description" content="问题描述：我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个radiobutton下的网络请求会发送两次，而且fragment也会创建两次，而且那个新建的fragment里还有很多的初始化过程和网络请求，所以会让用户一直处在等">
   
     <link rel="alternative" href="/atom.xml" title="ironmantony" type="application/atom+xml">
   
@@ -70,96 +74,64 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2014" class="archive-year">2014</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2014/03/20/行为型模式/" class="archive-article-date">
-  <time datetime="2014-03-20T04:44:43.000Z" itemprop="datePublished">3月 20</time>
+      <section id="main"><article id="post-RadioGroup-check-的坑" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/02/RadioGroup-check-的坑/" class="article-date">
+  <time datetime="2015-10-01T16:20:43.000Z" itemprop="datePublished">2015-10-02</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2014/03/20/行为型模式/">行为型模式</a>
+    <h1 class="article-title" itemprop="name">
+      RadioGroup.check()的坑
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2014/03/20/结构型模式/" class="archive-article-date">
-  <time datetime="2014-03-20T03:44:42.000Z" itemprop="datePublished">3月 20</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2014/03/20/结构型模式/">结构型模式</a>
-    </h1>
-  
+        <h3 id="问题描述：">问题描述：</h3><p>我使用RadioGroup.check()方法来初始化radioGroup，然后我在onCheckedChanged()里去根据选择的radioButton来发送网络请求，并且新建fragment。这时候我发现一个问题：这个radiobutton下的网络请求会发送两次，而且fragment也会创建两次，而且那个新建的fragment里还有很多的初始化过程和网络请求，所以会让用户一直处在等待的状态。</p>
+<p>开始时候各种找原因，以为是我在哪里调用了太多次，还是共用layout文件有相同的id所以被别的地方的调用影响了？都不是，最后在stackoverflow上找到了答案：使用RadioGroup.check()会调用onCheckedChanged()方法三次，而我在onCheckedChanged()方法里判断了调用的是哪个id，然后发送请求创建fragmeng，所以只调用了两次。</p>
+<h3 id="statckoverflow原文链接：">statckoverflow原文链接：</h3><p><a href="http://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times" target="_blank" rel="external">http://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times</a></p>
+<p><img src="/img/radiogroupChecks.png" alt="workflow.png"></p>
+<h3 id="RadioGroup-check()源码如下：">RadioGroup.check()源码如下：</h3><p><a href="http://www.grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/android/widget/RadioGroup.java#RadioGroup.check%28int%29" target="_blank" rel="external">http://www.grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.1.1_r1/android/widget/RadioGroup.java#RadioGroup.check%28int%29</a></p>
+<p><img src="/img/radiogroup2.png" alt="workflow.png"></p>
+<h3 id="解决方法_：">解决方法 ：</h3><p>使用radioBotton.setChecked()方法来解决</p>
+<p><img src="/img/radiogroup3.png" alt="workflow.png"></p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2014/03/20/建造型设计模式/" class="archive-article-date">
-  <time datetime="2014-03-20T02:44:41.000Z" itemprop="datePublished">3月 20</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2014/03/20/建造型设计模式/">建造型设计模式</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2014/03/20/design-pattern/" class="archive-article-date">
-  <time datetime="2014-03-20T01:44:40.000Z" itemprop="datePublished">3月 20</time>
-</a>
+    </div>
+    <footer class="article-footer">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2014/03/20/design-pattern/">design_pattern</a>
-    </h1>
-  
+        <a data-url="http://yoursite.com/2015/10/02/RadioGroup-check-的坑/" data-id="cif8fymd300001wxpswds15l6" class="article-share-link">分享到</a>
+      
 
-    </header>
+      
+
+      
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/08/06/AysncTask源码解析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">AysncTask源码解析</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
       
       <aside id="sidebar">
