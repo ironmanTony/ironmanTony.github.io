@@ -72,64 +72,6 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-使用monkey对app进行压力测试" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/05/04/使用monkey对app进行压力测试/" class="article-date">
-  <time datetime="2015-05-04T02:42:24.000Z" itemprop="datePublished">2015-05-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/04/使用monkey对app进行压力测试/">使用monkey对app进行压力测试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>其实monkey压力测试也不需要怎么去配置，只是有一些参数。</p>
-<hr>
-<ul>
-<li><p>使用adb shell来连接一个模拟器或者真机。<br>直接adb shell</p>
-</li>
-<li><p>使用monkey -p packagename -v times 随机生成times个event来测试packagename的default界面。     </p>
-<blockquote>
-<p>比如：monkey -p com.tencent.mobileqq -v 5000<br>对qq来进行压力测试。</p>
-</blockquote>
-<p>或者monkey -p packagename —pct-touch 100 -v times。<code>-v times</code>是一定要带上的。</p>
-</li>
-</ul>
-<hr>
-<h2 id="这些命令都简单，但是我现在想要获取到qq的包名。">这些命令都简单，但是我现在想要获取到qq的包名。</h2><p>使用命令<code>pm list packages -f</code>就可以获取到设备上所有已经安装的包名。<br>这样就获取到qq的包名为：com.tencent.mobileqq<br>这样我就可以使用monkey来玩qq了。     </p>
-<hr>
-<p>本来想用这种方式来测试一下是否可以用monkey来抢微信红包，<br>然后我就运行了<code>monkey -p com.tencent.mm --pct-touch 100 -v 2000</code>结果加了好多好友而且还没有发送成功。。。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/05/04/使用monkey对app进行压力测试/" data-id="cifaqyh4u000ijkxp41d8d8wu" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-关于如何解决一个问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/05/01/关于如何解决一个问题/" class="article-date">
@@ -165,7 +107,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/01/关于如何解决一个问题/" data-id="cifaqyh56000qjkxp2bmfwymc" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/01/关于如何解决一个问题/" data-id="cifarse10000q3oxphtkv1214" class="article-share-link">分享到</a>
       
 
       
@@ -224,13 +166,63 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/04/30/Android中使用UnitTest/" data-id="cifaqyh59000tjkxp16pygp2m" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/04/30/Android中使用UnitTest/" data-id="cifarse13000t3oxp5q9fbm36" class="article-share-link">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/">test</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hashmap的几个点" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/09/18/hashmap的几个点/" class="article-date">
+  <time datetime="2014-09-18T15:54:58.000Z" itemprop="datePublished">2014-09-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/09/18/hashmap的几个点/">hashmap的几个点</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="总结：">总结：</h2><ul>
+<li><p>解决碰撞是使用拉链法</p>
+</li>
+<li><p>为什么数组大小最好是2的整数次方，因为hashmap的hash函数并不是对数组大小取余，因为取余比较耗时，而是使用数组大小减1和hash值做与运算，如果数组大小不是2的整数次方，那么数组大小减1的二进制的最后一位就是0了，和key的hash值取与运算最后一位一直是0，所以有很大的空间浪费。</p>
+</li>
+<li><p>由于hashmap扩容需要重新计算所有元素的位置所以非常耗时，所以我们在知道hashmap大小的时候可以指定其大小，但是由于factory的存在，我们虽然知道指定2的整数次方，factory *  设定的数组大小 = 需要的数组大小，比如我们需要1000，不是设置为1024就好了，由于factory = 0.75，所以我们需要把数组大小设为 1000 / 0.75 然后再是2的整数次方，就是2048</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2014/09/18/hashmap的几个点/" data-id="cifarse1f00143oxpwn12c9ah" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -266,14 +258,14 @@
 <h3 id="sigleTop:">sigleTop:</h3><p>如果需要启动的Activity刚刚好在栈顶，则不会再去创建Activity的实例,否则，创建Activity实例</p>
 <h3 id="sigleTask">sigleTask</h3><p>如果在同一个应用中启动Activity，如果栈中没有，则创建新实例；如果有则直接杀死之上的所有activity使需要启动的activity成为栈顶<br>如果是在别的应用中启动该activity则会重新创建一个栈</p>
 <h3 id="sigleInstance:">sigleInstance:</h3><p>只有一个实例并且单独运行在一个task中，这个task只有这个实例，不允许有别的activity存在。</p>
-<h1 id="@_参考资料：">@ 参考资料：</h1><hr>
+<h2 id="参考资料：">参考资料：</h2><hr>
 <p><a href="http://blog.csdn.net/shinay/article/details/7898492" target="_blank" rel="external">http://blog.csdn.net/shinay/article/details/7898492</a></p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/09/18/Activity的几种启动方式/" data-id="cifaqyh5u0018jkxprxf95fda" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/09/18/Activity的几种启动方式/" data-id="cifarse1k00183oxpt3xbae9l" class="article-share-link">分享到</a>
       
 
       
@@ -385,7 +377,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/行为型模式/" data-id="cifaqyh4d0003jkxpvn06grmb" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/行为型模式/" data-id="cifarse0700033oxp857pct18" class="article-share-link">分享到</a>
       
 
       
@@ -493,7 +485,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/结构型模式/" data-id="cifaqyh4h0006jkxphn46xvz3" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/结构型模式/" data-id="cifarse0a00063oxplo0x1qm2" class="article-share-link">分享到</a>
       
 
       
@@ -547,7 +539,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/建造型设计模式/" data-id="cifaqyh4j0008jkxpacm5tlx1" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/建造型设计模式/" data-id="cifarse0c00083oxpfzsdficq" class="article-share-link">分享到</a>
       
 
       
@@ -629,7 +621,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2014/03/20/design-pattern/" data-id="cifaqyh4m000ajkxpdfgwxvbz" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/03/20/design-pattern/" data-id="cifarse0e000a3oxprsndooo8" class="article-share-link">分享到</a>
       
 
       
@@ -677,7 +669,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -689,14 +681,6 @@
       <ul>
         
           <li>
-            <a href="/2015/10/03/idea上一些实用的快捷键/">idea上一些实用的快捷键</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/03/hashmap的几个点/">hashmap的几个点</a>
-          </li>
-        
-          <li>
             <a href="/2015/09/29/android插件化开发/">android插件化开发</a>
           </li>
         
@@ -705,7 +689,15 @@
           </li>
         
           <li>
-            <a href="/2015/08/20/java-io/">java io</a>
+            <a href="/2015/08/18/java-io/">java io</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/18/some-useful-git-command/">some useful git command</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
           </li>
         
       </ul>

@@ -4,18 +4,33 @@
 <head>
   <meta charset="utf-8">
   
-  <title>some useful git command | ironmantony</title>
+  <title>hashmap的几个点 | ironmantony</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变GIT: ignoring changes in tracked files29/01/2009There may be times when you want to edit some variables in for example a database connection file, to run an applic">
+  <meta name="description" content="总结：
+解决碰撞是使用拉链法
+
+为什么数组大小最好是2的整数次方，因为hashmap的hash函数并不是对数组大小取余，因为取余比较耗时，而是使用数组大小减1和hash值做与运算，如果数组大小不是2的整数次方，那么数组大小减1的二进制的最后一位就是0了，和key的hash值取与运算最后一位一直是0，所以有很大的空间浪费。
+
+由于hashmap扩容需要重新计算所有元素的位置所以非常耗时，所以我们在知">
 <meta property="og:type" content="article">
-<meta property="og:title" content="some useful git command">
-<meta property="og:url" content="http://yoursite.com/2015/08/20/some-useful-git-command/index.html">
+<meta property="og:title" content="hashmap的几个点">
+<meta property="og:url" content="http://yoursite.com/2014/09/18/hashmap的几个点/index.html">
 <meta property="og:site_name" content="ironmantony">
-<meta property="og:description" content="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变GIT: ignoring changes in tracked files29/01/2009There may be times when you want to edit some variables in for example a database connection file, to run an applic">
-<meta property="og:updated_time" content="2015-10-03T06:15:40.004Z">
+<meta property="og:description" content="总结：
+解决碰撞是使用拉链法
+
+为什么数组大小最好是2的整数次方，因为hashmap的hash函数并不是对数组大小取余，因为取余比较耗时，而是使用数组大小减1和hash值做与运算，如果数组大小不是2的整数次方，那么数组大小减1的二进制的最后一位就是0了，和key的hash值取与运算最后一位一直是0，所以有很大的空间浪费。
+
+由于hashmap扩容需要重新计算所有元素的位置所以非常耗时，所以我们在知">
+<meta property="og:updated_time" content="2015-10-03T07:42:20.295Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="some useful git command">
-<meta name="twitter:description" content="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变GIT: ignoring changes in tracked files29/01/2009There may be times when you want to edit some variables in for example a database connection file, to run an applic">
+<meta name="twitter:title" content="hashmap的几个点">
+<meta name="twitter:description" content="总结：
+解决碰撞是使用拉链法
+
+为什么数组大小最好是2的整数次方，因为hashmap的hash函数并不是对数组大小取余，因为取余比较耗时，而是使用数组大小减1和hash值做与运算，如果数组大小不是2的整数次方，那么数组大小减1的二进制的最后一位就是0了，和key的hash值取与运算最后一位一直是0，所以有很大的空间浪费。
+
+由于hashmap扩容需要重新计算所有元素的位置所以非常耗时，所以我们在知">
   
     <link rel="alternative" href="/atom.xml" title="ironmantony" type="application/atom+xml">
   
@@ -71,10 +86,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-some-useful-git-command" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-hashmap的几个点" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/08/20/some-useful-git-command/" class="article-date">
-  <time datetime="2015-08-20T08:35:10.000Z" itemprop="datePublished">2015-08-20</time>
+    <a href="/2014/09/18/hashmap的几个点/" class="article-date">
+  <time datetime="2014-09-18T15:54:58.000Z" itemprop="datePublished">2014-09-18</time>
 </a>
     
   </div>
@@ -85,7 +100,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      some useful git command
+      hashmap的几个点
     </h1>
   
 
@@ -93,27 +108,26 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变">不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变</h2><h3 id="GIT:_ignoring_changes_in_tracked_files29/01/2009">GIT: ignoring changes in tracked files29/01/2009</h3><p>There may be times when you want to edit some variables in for example a database connection file, to run an application right from within your GIT repo. Of course you don’t wont those changes to be commited, so you add the file the .gitignore.<br>However adding tracked files to .gitignore won’t work because GIT will still track the changes and commit the file if you use the -a parameter.<br>Fortunately GIT has a very easy solution for this, just run the following command on the file or path you want to ignore the changes of:</p>
-<blockquote>
-<p><code>git update-index --assume-unchanged &lt;file&gt;</code>    </p>
-</blockquote>
-<p>If you wanna start tracking changes again run the following command:</p>
-<blockquote>
-<p><code>git update-index --no-assume-unchanged &lt;file&gt;</code></p>
-</blockquote>
-<h3 id="参考资料：">参考资料：</h3><p><a href="http://blog.pagebakers.nl/2009/01/29/git-ignoring-changes-in-tracked-files/" target="_blank" rel="external">http://blog.pagebakers.nl/2009/01/29/git-ignoring-changes-in-tracked-files/</a></p>
+        <h2 id="总结：">总结：</h2><ul>
+<li><p>解决碰撞是使用拉链法</p>
+</li>
+<li><p>为什么数组大小最好是2的整数次方，因为hashmap的hash函数并不是对数组大小取余，因为取余比较耗时，而是使用数组大小减1和hash值做与运算，如果数组大小不是2的整数次方，那么数组大小减1的二进制的最后一位就是0了，和key的hash值取与运算最后一位一直是0，所以有很大的空间浪费。</p>
+</li>
+<li><p>由于hashmap扩容需要重新计算所有元素的位置所以非常耗时，所以我们在知道hashmap大小的时候可以指定其大小，但是由于factory的存在，我们虽然知道指定2的整数次方，factory *  设定的数组大小 = 需要的数组大小，比如我们需要1000，不是设置为1024就好了，由于factory = 0.75，所以我们需要把数组大小设为 1000 / 0.75 然后再是2的整数次方，就是2048</p>
+</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/08/20/some-useful-git-command/" data-id="cifaqyh5c000wjkxpd5k1tvrf" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2014/09/18/hashmap的几个点/" data-id="cifarse1f00143oxpwn12c9ah" class="article-share-link">分享到</a>
       
 
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li></ul>
 
     </footer>
   </div>
@@ -121,19 +135,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/08/20/java-io/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/04/30/Android中使用UnitTest/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">
         
-          java io
+          在Android中使用unittest
         
       </div>
     </a>
   
   
-    <a href="/2015/08/06/AysncTask源码解析/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2014/09/18/Activity的几种启动方式/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">AysncTask源码解析</div>
+      <div class="article-nav-title">Activity的几种启动方式</div>
     </a>
   
 </nav>
@@ -169,7 +183,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -181,14 +195,6 @@
       <ul>
         
           <li>
-            <a href="/2015/10/03/idea上一些实用的快捷键/">idea上一些实用的快捷键</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/03/hashmap的几个点/">hashmap的几个点</a>
-          </li>
-        
-          <li>
             <a href="/2015/09/29/android插件化开发/">android插件化开发</a>
           </li>
         
@@ -197,7 +203,15 @@
           </li>
         
           <li>
-            <a href="/2015/08/20/java-io/">java io</a>
+            <a href="/2015/08/18/java-io/">java io</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/18/some-useful-git-command/">some useful git command</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
           </li>
         
       </ul>

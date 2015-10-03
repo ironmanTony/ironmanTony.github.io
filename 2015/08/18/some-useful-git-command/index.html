@@ -4,17 +4,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/10 | ironmantony</title>
+  <title>some useful git command | ironmantony</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ironmantony">
-<meta property="og:url" content="http://yoursite.com/archives/2015/10/index.html">
+  <meta name="description" content="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变GIT: ignoring changes in tracked files29/01/2009There may be times when you want to edit some variables in for example a database connection file, to run an applic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="some useful git command">
+<meta property="og:url" content="http://yoursite.com/2015/08/18/some-useful-git-command/index.html">
 <meta property="og:site_name" content="ironmantony">
-<meta property="og:description">
+<meta property="og:description" content="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变GIT: ignoring changes in tracked files29/01/2009There may be times when you want to edit some variables in for example a database connection file, to run an applic">
+<meta property="og:updated_time" content="2015-10-03T07:45:18.310Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ironmantony">
-<meta name="twitter:description">
+<meta name="twitter:title" content="some useful git command">
+<meta name="twitter:description" content="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变GIT: ignoring changes in tracked files29/01/2009There may be times when you want to edit some variables in for example a database connection file, to run an applic">
   
     <link rel="alternative" href="/atom.xml" title="ironmantony" type="application/atom+xml">
   
@@ -70,58 +71,76 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/10/03/idea上一些实用的快捷键/" class="archive-article-date">
-  <time datetime="2015-10-03T06:22:43.000Z" itemprop="datePublished">10月 3</time>
+      <section id="main"><article id="post-some-useful-git-command" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/18/some-useful-git-command/" class="article-date">
+  <time datetime="2015-08-18T08:35:10.000Z" itemprop="datePublished">2015-08-18</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/03/idea上一些实用的快捷键/">idea上一些实用的快捷键</a>
+    <h1 class="article-title" itemprop="name">
+      some useful git command
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/10/03/hashmap的几个点/" class="archive-article-date">
-  <time datetime="2015-10-03T04:46:58.000Z" itemprop="datePublished">10月 3</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/03/hashmap的几个点/">hashmap的几个点</a>
-    </h1>
-  
+        <h2 id="不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变">不提交一个文件（已经在仓库中，并且不想将远程仓库中的文件删除）在本地的改变</h2><h3 id="GIT:_ignoring_changes_in_tracked_files29/01/2009">GIT: ignoring changes in tracked files29/01/2009</h3><p>There may be times when you want to edit some variables in for example a database connection file, to run an application right from within your GIT repo. Of course you don’t wont those changes to be commited, so you add the file the .gitignore.<br>However adding tracked files to .gitignore won’t work because GIT will still track the changes and commit the file if you use the -a parameter.<br>Fortunately GIT has a very easy solution for this, just run the following command on the file or path you want to ignore the changes of:</p>
+<blockquote>
+<p><code>git update-index --assume-unchanged &lt;file&gt;</code>    </p>
+</blockquote>
+<p>If you wanna start tracking changes again run the following command:</p>
+<blockquote>
+<p><code>git update-index --no-assume-unchanged &lt;file&gt;</code></p>
+</blockquote>
+<h3 id="参考资料：">参考资料：</h3><p><a href="http://blog.pagebakers.nl/2009/01/29/git-ignoring-changes-in-tracked-files/" target="_blank" rel="external">http://blog.pagebakers.nl/2009/01/29/git-ignoring-changes-in-tracked-files/</a></p>
 
-    </header>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/08/18/some-useful-git-command/" data-id="cifarse16000w3oxpxwrykcbp" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/08/18/java-io/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          java io
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/08/06/AysncTask源码解析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">AysncTask源码解析</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
+
 </section>
       
       <aside id="sidebar">
@@ -150,7 +169,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -162,14 +181,6 @@
       <ul>
         
           <li>
-            <a href="/2015/10/03/idea上一些实用的快捷键/">idea上一些实用的快捷键</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/03/hashmap的几个点/">hashmap的几个点</a>
-          </li>
-        
-          <li>
             <a href="/2015/09/29/android插件化开发/">android插件化开发</a>
           </li>
         
@@ -178,7 +189,15 @@
           </li>
         
           <li>
-            <a href="/2015/08/20/java-io/">java io</a>
+            <a href="/2015/08/18/java-io/">java io</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/18/some-useful-git-command/">some useful git command</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
           </li>
         
       </ul>
