@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2015/10/03/java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8C%E5%AF%B9%E8%B1%A1%E6%B1%A0/</loc>
+    <lastmod>2015-10-03T11:23:02.418Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2015/09/29/android%E6%8F%92%E4%BB%B6%E5%8C%96%E5%BC%80%E5%8F%91/</loc>
     <lastmod>2015-10-03T07:52:13.366Z</lastmod>
   </url>
