@@ -14,8 +14,8 @@ git fetch和git pull区别：其实git pull相当于：git fetch , git mergehttp
 <meta property="og:site_name" content="ironmantony">
 <meta property="og:description" content="git merge和git rebase区别：这个文件写的很清楚http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88     
 git fetch和git pull区别：其实git pull相当于：git fetch , git mergehttp://s">
-<meta property="og:image" content="http://yoursite.com/img/workflow.png">
-<meta property="og:updated_time" content="2015-07-27T02:32:38.901Z">
+<meta property="og:image" content="http://yoursite.com/imgs/workflow.png">
+<meta property="og:updated_time" content="2015-10-03T05:10:15.796Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于git的几个问题">
 <meta name="twitter:description" content="git merge和git rebase区别：这个文件写的很清楚http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88     
@@ -100,18 +100,22 @@ git fetch和git pull区别：其实git pull相当于：git fetch , git mergehttp
         <h2 id="git_merge和git_rebase区别：">git merge和git rebase区别：</h2><p>这个文件写的很清楚<br><a href="http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88" target="_blank" rel="external">http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88</a>     </p>
 <h2 id="git_fetch和git_pull区别：">git fetch和git pull区别：</h2><p>其实git pull相当于：git fetch , git merge<br><a href="http://stackoverflow.com/questions/292357/what-are-the-differences-between-git-pull-and-git-fetch" target="_blank" rel="external">http://stackoverflow.com/questions/292357/what-are-the-differences-between-git-pull-and-git-fetch</a>    </p>
 <h2 id="到底是应该使用git_pull_还是_git_pull_—rebase_?">到底是应该使用git pull 还是 git pull —rebase ?</h2><p>我个人赞同使用git pull —rebase,因为如果多个人开发并且经常pull的话，就会出现很多：<code>Merge branch &#39;aaa&#39; of git.xxx.xxx/xxx/xxx into aaa</code>这样的commit。<br>就像这里的讨论：<a href="https://ruby-china.org/topics/112" target="_blank" rel="external">https://ruby-china.org/topics/112</a></p>
-<h2 id="我们使用的工作流【集中式工作流】：">我们使用的工作流【集中式工作流】：</h2><p><a href="http://git-scm.com/book/zh/v1/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" target="_blank" rel="external">http://git-scm.com/book/zh/v1/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B</a><br>通常，集中式工作流程使用的都是单点协作模型。一个存放代码仓库的中心服务器，可以接受所有开发者提交的代码。所有的开发者都是普通的节点，作为中心集线器的消费者，平时的工作就是和中心仓库同步数据（见图 5-1）。<br><img src="/img/workflow.png" alt="workflow.png"><br>如果两个开发者从中心仓库克隆代码下来，同时作了一些修订，那么只有第一个开发者可以顺利地把数据推送到共享服务器。第二个开发者在提交他的修订之前，必须先下载合并服务器上的数据，解决冲突之后才能推送数据到共享服务器上。在 Git 中这么用也决无问题，这就好比是在用 Subversion（或其他 CVCS）一样，可以很好地工作。<br>如果你的团队不是很大，或者大家都已经习惯了使用集中式工作流程，完全可以采用这种简单的模式。只需要配置好一台中心服务器，并给每个人推送数据的权限，就可以开展工作了。<strong>但如果提交代码时有冲突， Git 根本就不会让用户覆盖他人代码，它直接驳回第二个人的提交操作。这就等于告诉提交者，你所作的修订无法通过快进（fast-forward）来合并，你必须先拉取最新数据下来，手工解决冲突合并后，才能继续推送新的提交</strong>。 绝大多数人都熟悉和了解这种模式的工作方式，所以使用也非常广泛。</p>
+<h2 id="我们使用的工作流【集中式工作流】：">我们使用的工作流【集中式工作流】：</h2><p><a href="http://git-scm.com/book/zh/v1/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" target="_blank" rel="external">http://git-scm.com/book/zh/v1/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B</a><br>通常，集中式工作流程使用的都是单点协作模型。一个存放代码仓库的中心服务器，可以接受所有开发者提交的代码。所有的开发者都是普通的节点，作为中心集线器的消费者，平时的工作就是和中心仓库同步数据（见图 5-1）。  </p>
+<p><img src="/imgs/workflow.png" alt="workflow.png"></p>
+<p>如果两个开发者从中心仓库克隆代码下来，同时作了一些修订，那么只有第一个开发者可以顺利地把数据推送到共享服务器。第二个开发者在提交他的修订之前，必须先下载合并服务器上的数据，解决冲突之后才能推送数据到共享服务器上。在 Git 中这么用也决无问题，这就好比是在用 Subversion（或其他 CVCS）一样，可以很好地工作。<br>如果你的团队不是很大，或者大家都已经习惯了使用集中式工作流程，完全可以采用这种简单的模式。只需要配置好一台中心服务器，并给每个人推送数据的权限，就可以开展工作了。<strong>但如果提交代码时有冲突， Git 根本就不会让用户覆盖他人代码，它直接驳回第二个人的提交操作。这就等于告诉提交者，你所作的修订无法通过快进（fast-forward）来合并，你必须先拉取最新数据下来，手工解决冲突合并后，才能继续推送新的提交</strong>。 绝大多数人都熟悉和了解这种模式的工作方式，所以使用也非常广泛。</p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="cif8g6e5x0006tcxpgwyr435b" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="cifaqyh4q000fjkxp48fx6wuj" class="article-share-link">分享到</a>
       
 
       
 
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
     </footer>
   </div>
   
@@ -145,14 +149,28 @@ git fetch和git pull区别：其实git pull相当于：git fetch , git mergehttp
     
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/design-pattern/">design pattern</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sourcecode-analyze/">sourcecode analyze</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thoughts/">thoughts</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tools/">tools</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/android/" style="font-size: 20px;">android</a> <a href="/tags/design-pattern/" style="font-size: 16.67px;">design pattern</a> <a href="/tags/git/" style="font-size: 13.33px;">git</a> <a href="/tags/gradle/" style="font-size: 10px;">gradle</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/sourcecode-analyze/" style="font-size: 10px;">sourcecode analyze</a> <a href="/tags/test/" style="font-size: 13.33px;">test</a> <a href="/tags/thoughts/" style="font-size: 10px;">thoughts</a> <a href="/tags/tools/" style="font-size: 10px;">tools</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -164,23 +182,23 @@ git fetch和git pull区别：其实git pull相当于：git fetch , git mergehttp
       <ul>
         
           <li>
-            <a href="/2015/10/02/RadioGroup-check-的坑/">RadioGroup.check()的坑</a>
+            <a href="/2015/10/03/idea上一些实用的快捷键/">idea上一些实用的快捷键</a>
           </li>
         
           <li>
-            <a href="/2015/08/06/AysncTask源码解析/">AysncTask源码解析</a>
+            <a href="/2015/10/03/hashmap的几个点/">hashmap的几个点</a>
           </li>
         
           <li>
-            <a href="/2015/05/23/gralde 循环依赖的问题/">gralde 循环依赖的问题</a>
+            <a href="/2015/09/29/android插件化开发/">android插件化开发</a>
           </li>
         
           <li>
-            <a href="/2015/05/20/listView 闪动的问题/">listView 闪动的问题</a>
+            <a href="/2015/09/29/RadioGroup-check-的坑/">RadioGroup.check()的坑</a>
           </li>
         
           <li>
-            <a href="/2015/05/05/git的几个问题/">关于git的几个问题</a>
+            <a href="/2015/08/20/java-io/">java io</a>
           </li>
         
       </ul>
