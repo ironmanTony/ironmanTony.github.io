@@ -72,6 +72,69 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Fragment的创建和管理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/10/19/Fragment的创建和管理/" class="article-date">
+  <time datetime="2016-10-19T10:59:06.000Z" itemprop="datePublished">2016-10-19</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/19/Fragment的创建和管理/">Fragment的创建和管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>我们很多应用都涉及到fragment的创建和管理，比如：下面n个tab，上面n个fragment的组合，activity管理多个fragment或者一个fragment等等。</p>
+</blockquote>
+<p>很多应用在MainActivity里的onCreate里去 一 一 实例化fragment，然后在tab切换的时候使用FragmentTransaction去添加或者替换fragment。<br>大概是这么写的<br><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onCreate<span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">    super.onCreate<span class="params">(savedInstanceState)</span>;</span><br><span class="line">    Log.e<span class="params">(<span class="string">"StateActivity"</span>, <span class="string">"---------------onCreate"</span>)</span>;</span><br><span class="line">    setContentView<span class="params">(R.layout.activity_main_for_state)</span>;</span><br><span class="line">    FragmentManager fm = getSupportFragmentManager<span class="params">()</span>;</span><br><span class="line">    FragmentTransaction ft = fm.beginTransaction<span class="params">()</span>;</span><br><span class="line">    ft.replace<span class="params">(R.id.state_fragment_container, Fragment1.newInstance<span class="params">(<span class="string">""</span>, <span class="string">""</span>)</span>)</span>;</span><br><span class="line">    ft.commit<span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种有没有问题呢？看着好像没有问题，但是如果你打开不保存状态然后再调试或者打印log你就会会发现问题了。</p>
+<p>我们有A，B两个Activity，A里有一个fragment，fragment里有一个按钮，可以跳转到Activity B。</p>
+<p>我们打开不保存状态，点击fragment里的按钮跳转到B，然后返回，看看A以及fragment的哪些生命周期调用了<br>看看log的打印信息：<br><img src="/imgs/log1.png" alt=""><br>（test是在onSavedInstanceState中保存的字符串）</p>
+<p>我们可以看到：</p>
+<pre><code><span class="bullet">1. </span>Fragment被创建两次。
+<span class="bullet">2. </span>第二次创建的fragment获取不到我们保存的状态。
+</code></pre><p>想一想也是有道理的：<br>在不保存状态的情况下，跳转到B之后，A和A里面的fragment都被销毁了，回到A的时候，log中打印的第一个fragment是系统保存状态然后恢复的fragment，所以保存的状态都能获取到，但是第二个fragment是在恢复activity运行生命周期onCreate方法的时候我们代码new出来的，所以第二个fragment里面是没有我们之前保存的状态的。</p>
+<p>这种问题要怎么解决呢？<br>如果只是解决问题1，重复创建fragment的情况（不想有两个fragment实例，因为有的如果是透明fragment可能还会出现重叠），很好解决使用replace，或者不调用fragment的super.onSavedInsance()等等。</p>
+<h3 id="但是如果我们想要在fragment中保存状态要怎么办呢？">但是如果我们想要在fragment中保存状态要怎么办呢？</h3><h3 id="1如果是一个fragment的activity。">1如果是一个fragment的activity。</h3><p>我们可以先从fragmentManager里去取，如果取到了，那么说明这个fragment已经有了，那么我们就什么也不做，如果没取到，我们再去创建。</p>
+<figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected void onCreate<span class="params">(Bundle savedInstanceState)</span> &#123;</span><br><span class="line">    super.onCreate<span class="params">(savedInstanceState)</span>;</span><br><span class="line">    Log.e<span class="params">(<span class="string">"StateActivity"</span>, <span class="string">"---------------onCreate"</span>)</span>;</span><br><span class="line">    setContentView<span class="params">(R.layout.activity_main_for_state)</span>;</span><br><span class="line">    FragmentManager fm = getSupportFragmentManager<span class="params">()</span>;</span><br><span class="line">    Fragment1 f = <span class="params">(Fragment1)</span> fm.findFragmentByTag<span class="params">(TAG_FRAGMENT1)</span>;</span><br><span class="line">    <span class="keyword">if</span> <span class="params">(f == null)</span> &#123;</span><br><span class="line">        FragmentTransaction ft = fm.beginTransaction<span class="params">()</span>;</span><br><span class="line">        f = Fragment1.newInstance<span class="params">(<span class="string">""</span>, <span class="string">""</span>)</span>;</span><br><span class="line">        ft.add<span class="params">(R.id.state_fragment_container, f, TAG_FRAGMENT1)</span>;</span><br><span class="line">        ft.commit<span class="params">()</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再来运行一下看看log：<br><img src="/imgs/log2.png" alt=""></p>
+<p>Fragment只被创建了一次，并且也能获取到他所保存的状态。<br>（其实也可以根据savedInstanceState是否为空来判断是否需要重新创建fragment。）</p>
+<h3 id="如果一个activity里需要创建多个fragment并且以tab的方式来切换，我们应该怎么做？">如果一个activity里需要创建多个fragment并且以tab的方式来切换，我们应该怎么做？</h3><p>借鉴fragmentTabHost里的做法，用一个TabInfo实体类来保存对应的tab和fragment之间的关系。对于fragment的创建，还是先从fragmentManager里去取，如果没有再去创建。</p>
+<p>使用一个TabInfo实体类来保存fragment和每个tab之间的关系。<br>比如：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> TabInfo &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> String tag;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">Class</span>&lt;? <span class="keyword">extends</span> Fragment&gt; clazz;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> viewId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> TabInfo(String tag, <span class="keyword">Class</span>&lt;? <span class="keyword">extends</span> Fragment&gt; clazz, <span class="keyword">int</span> viewId) &#123;</span><br><span class="line">        <span class="keyword">this</span>.tag = tag;</span><br><span class="line">        <span class="keyword">this</span>.clazz = clazz;</span><br><span class="line">        <span class="keyword">this</span>.viewId = viewId;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后用一个list来保存所有的tab信息：<br><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> ArrayList&lt;TabInfo&gt; tabInfos = <span class="keyword">new</span> ArrayList&lt;TabInfo&gt;(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//在onCreate()中初始化tab</span></span><br><span class="line">tabInfos.<span class="keyword">add</span>(<span class="keyword">new</span> TabInfo(Fragment1.<span class="keyword">class</span>.getSimpleName(), Fragment1.<span class="keyword">class</span>, R.id.tab_right));</span><br><span class="line">tabInfos.<span class="keyword">add</span>(<span class="keyword">new</span> TabInfo(Fragment2.<span class="keyword">class</span>.getSimpleName(), Fragment2.<span class="keyword">class</span>, R.id.tab_left));</span><br></pre></td></tr></table></figure></p>
+<p>当然这里做的比较粗糙，使用两个按钮做tab，也可以使用其他的自定义view。</p>
+<p>切换的时候<br><figure class="highlight openscad"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">private void switchTab<span class="params">(int tabIndex)</span> &#123;</span><br><span class="line">    TabInfo tabInfo = tabInfos.get<span class="params">(tabIndex)</span>;</span><br><span class="line">    FragmentManager fm = getSupportFragmentManager<span class="params">()</span>;</span><br><span class="line">    Fragment f = fm.findFragmentByTag<span class="params">(tabInfo.tag)</span>;</span><br><span class="line">    FragmentTransaction transaction = fm.beginTransaction<span class="params">()</span>;</span><br><span class="line">    <span class="keyword">if</span> <span class="params">(f == null)</span> &#123;</span><br><span class="line">        f = Fragment.instantiate<span class="params">(this, tabInfo.clazz.getName<span class="params">()</span>)</span>;</span><br><span class="line">        transaction.add<span class="params">(R.id.tab_fragment_container, f, tabInfo.tag)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> <span class="params">(currentFragment != null &amp;&amp; currentFragment != f)</span> &#123;</span><br><span class="line">        transaction.hide<span class="params">(currentFragment)</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    transaction.show<span class="params">(f)</span>;</span><br><span class="line">    transaction.commit<span class="params">()</span>;</span><br><span class="line">    currentFragment = f;</span><br><span class="line">    this.tabIndex = tabIndex;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里替换fragment用的是show/hide（不销毁fragment和视图），当然你也可以使用detach/attach（只销毁视图不销毁fragment实例）<br><a href="http://www.voidcn.com/blog/u013168615/article/p-5794851.html" target="_blank" rel="external">http://www.voidcn.com/blog/u013168615/article/p-5794851.html</a> （这篇文章讲show/hide，detach/attach等等比较详细）</p>
+<p>再来看看我们的log：<br><img src="/imgs/log3.png" alt=""><br>一切正常！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2016/10/19/Fragment的创建和管理/" data-id="ciuh05bn0000cu8xpxlw5x9em" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-java线程池和对象池" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/03/java线程池和对象池/" class="article-date">
@@ -155,7 +218,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/10/03/java线程池和对象池/" data-id="cir0gue1o000yioxpo1tjyp1n" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/10/03/java线程池和对象池/" data-id="ciuh05bo0000zu8xppos3pvna" class="article-share-link">分享到</a>
       
 
       
@@ -249,7 +312,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/09/29/android插件化开发/" data-id="cir0gue1y0018ioxpzwjma2e1" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/09/29/android插件化开发/" data-id="ciuh05boa0019u8xpvpl4oizg" class="article-share-link">分享到</a>
       
 
       
@@ -299,7 +362,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/09/29/RadioGroup-check-的坑/" data-id="cir0gudzr0000ioxpx7671hwx" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/09/29/RadioGroup-check-的坑/" data-id="ciuh05blr0000u8xprx63vc4l" class="article-share-link">分享到</a>
       
 
       
@@ -344,7 +407,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/08/18/java-io/" data-id="cir0gue1r0011ioxpa17771h1" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/08/18/java-io/" data-id="ciuh05bo30012u8xptz7hzucd" class="article-share-link">分享到</a>
       
 
       
@@ -395,7 +458,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/08/18/some-useful-git-command/" data-id="cir0gue1m000wioxprr4y82ff" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/08/18/some-useful-git-command/" data-id="ciuh05bnx000xu8xpdr09i92n" class="article-share-link">分享到</a>
       
 
       
@@ -452,7 +515,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/08/06/AysncTask源码解析/" data-id="cir0gue0x000cioxpc43iiigv" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/08/06/AysncTask源码解析/" data-id="ciuh05bn3000du8xpj12w3h7w" class="article-share-link">分享到</a>
       
 
       
@@ -544,7 +607,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/06/17/idea上一些实用的快捷键/" data-id="cir0gue1s0013ioxpwafco6ts" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/06/17/idea上一些实用的快捷键/" data-id="ciuh05bo50014u8xpaw183uwk" class="article-share-link">分享到</a>
       
 
       
@@ -602,7 +665,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/23/gralde 循环依赖的问题/" data-id="cir0gue19000lioxp3sfw0re4" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/23/gralde 循环依赖的问题/" data-id="ciuh05bnj000mu8xp1ay54jb7" class="article-share-link">分享到</a>
       
 
       
@@ -661,61 +724,13 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/05/20/listView 闪动的问题/" data-id="cir0gue1b000oioxp6ijbvuvw" class="article-share-link">分享到</a>
+        <a data-url="http://yoursite.com/2015/05/20/listView 闪动的问题/" data-id="ciuh05bnm000pu8xp90r400xr" class="article-share-link">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/">android</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-git的几个问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/05/05/git的几个问题/" class="article-date">
-  <time datetime="2015-05-05T02:42:24.000Z" itemprop="datePublished">2015-05-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/05/05/git的几个问题/">关于git的几个问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="git_merge和git_rebase区别：">git merge和git rebase区别：</h2><p>这个文件写的很清楚<br><a href="http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88" target="_blank" rel="external">http://git-scm.com/book/zh/v1/Git-%E5%88%86%E6%94%AF-%E5%88%86%E6%94%AF%E7%9A%84%E8%A1%8D%E5%90%88</a>     </p>
-<h2 id="git_fetch和git_pull区别：">git fetch和git pull区别：</h2><p>其实git pull相当于：git fetch , git merge<br><a href="http://stackoverflow.com/questions/292357/what-are-the-differences-between-git-pull-and-git-fetch" target="_blank" rel="external">http://stackoverflow.com/questions/292357/what-are-the-differences-between-git-pull-and-git-fetch</a>    </p>
-<h2 id="到底是应该使用git_pull_还是_git_pull_—rebase_?">到底是应该使用git pull 还是 git pull —rebase ?</h2><p>我个人赞同使用git pull —rebase,因为如果多个人开发并且经常pull的话，就会出现很多：<code>Merge branch &#39;aaa&#39; of git.xxx.xxx/xxx/xxx into aaa</code>这样的commit。<br>就像这里的讨论：<a href="https://ruby-china.org/topics/112" target="_blank" rel="external">https://ruby-china.org/topics/112</a></p>
-<h2 id="我们使用的工作流【集中式工作流】：">我们使用的工作流【集中式工作流】：</h2><p><a href="http://git-scm.com/book/zh/v1/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B" target="_blank" rel="external">http://git-scm.com/book/zh/v1/%E5%88%86%E5%B8%83%E5%BC%8F-Git-%E5%88%86%E5%B8%83%E5%BC%8F%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B</a><br>通常，集中式工作流程使用的都是单点协作模型。一个存放代码仓库的中心服务器，可以接受所有开发者提交的代码。所有的开发者都是普通的节点，作为中心集线器的消费者，平时的工作就是和中心仓库同步数据（见图 5-1）。  </p>
-<p><img src="/imgs/workflow.png" alt="workflow.png"></p>
-<p>如果两个开发者从中心仓库克隆代码下来，同时作了一些修订，那么只有第一个开发者可以顺利地把数据推送到共享服务器。第二个开发者在提交他的修订之前，必须先下载合并服务器上的数据，解决冲突之后才能推送数据到共享服务器上。在 Git 中这么用也决无问题，这就好比是在用 Subversion（或其他 CVCS）一样，可以很好地工作。<br>如果你的团队不是很大，或者大家都已经习惯了使用集中式工作流程，完全可以采用这种简单的模式。只需要配置好一台中心服务器，并给每个人推送数据的权限，就可以开展工作了。<strong>但如果提交代码时有冲突， Git 根本就不会让用户覆盖他人代码，它直接驳回第二个人的提交操作。这就等于告诉提交者，你所作的修订无法通过快进（fast-forward）来合并，你必须先拉取最新数据下来，手工解决冲突合并后，才能继续推送新的提交</strong>。 绝大多数人都熟悉和了解这种模式的工作方式，所以使用也非常广泛。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/05/05/git的几个问题/" data-id="cir0gue10000fioxpnbw9l55z" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
 
     </footer>
   </div>
@@ -757,7 +772,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/05/">五月 2015</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">4</span></li></ul>
     </div>
   </div>
 
@@ -767,6 +782,10 @@
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2016/10/19/Fragment的创建和管理/">Fragment的创建和管理</a>
+          </li>
         
           <li>
             <a href="/2015/10/03/java线程池和对象池/">java线程池和对象池</a>
@@ -782,10 +801,6 @@
         
           <li>
             <a href="/2015/08/18/java-io/">java io</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/18/some-useful-git-command/">some useful git command</a>
           </li>
         
       </ul>
